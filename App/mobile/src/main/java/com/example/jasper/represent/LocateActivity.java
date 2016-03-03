@@ -69,7 +69,9 @@ public class LocateActivity extends AppCompatActivity {
 
     private void attemptLocate(){
         //do nothing for now besides go to next screen
-        if(!isZipValid(zipView.getText().toString())){
+        if(!zipView.getText().toString().equals("") && useLocCB.isChecked()){
+            locateError.setText("Please only use one location option, not both.");
+        }else if(!isZipValid(zipView.getText().toString())){
             locateError.setText("Please enter valid 5 digit zipcode.");
         }else{
             locateError.setText("");

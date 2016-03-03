@@ -44,12 +44,6 @@
                 android:text="We&apos;ll tell you what you need to know for the upcoming election. \n\nTo find out who represents you, we first need to know where you are.\n\n For best results, use current location."
                 android:id="@+id/textView2" />
 
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/progressBar" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

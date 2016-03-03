@@ -35,7 +35,7 @@ public class CongressActivity extends AppCompatActivity {
 
     private void goToDetails(){
         //do nothing for now besides go to next screen
-        Intent intent = new Intent(this, CongressActivity.class);
+        Intent intent = new Intent(this, DetailsActivity.class);
 //        intent.putExtra("ZIP", zip);
         startActivity(intent);
     }

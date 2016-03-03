@@ -32,6 +32,15 @@
                 android:value=".LocateActivity" />
         </activity>
 
+        <activity
+            android:name=".DetailsActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".CongressActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CongressActivity" />
+        </activity>
+
         <service android:name=".PhoneToWatchService" />
         <!-- Listeners are special services that need to be declared like below, as BIND_LISTENER -->
         <service android:name=".PhoneListenerService"
