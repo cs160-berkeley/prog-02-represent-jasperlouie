@@ -78,6 +78,14 @@ public class LocateActivity extends AppCompatActivity {
             String zip = zipView.getText().toString();
             Intent intent = new Intent(this, CongressActivity.class);
             intent.putExtra("zip", zip);
+
+            Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+            if(zip.equals("21042")){
+                sendIntent.putExtra("zip", "21042");
+            }else {
+                sendIntent.putExtra("zip", "94704");
+            }
+            startService(sendIntent);
             startActivity(intent);
         }
 

@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Jasper on 3/2/2016.
@@ -31,7 +28,7 @@ public class CongressActivity extends AppCompatActivity {
     private ArrayList<String> dicts;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_congress2);
+        setContentView(R.layout.activity_congress);
         String zip;
         zip =  getIntent().getExtras().getString("zip");
         location = (TextView) findViewById(R.id.location);
@@ -132,7 +129,6 @@ public class CongressActivity extends AppCompatActivity {
         //do nothing for now besides go to next screen
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("json", dicts.get(i));
-//        intent.putExtra("ZIP", zip);
         startActivity(intent);
     }
 }

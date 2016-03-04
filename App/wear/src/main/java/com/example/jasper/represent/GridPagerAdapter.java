@@ -27,10 +27,12 @@ public class GridPagerAdapter extends FragmentGridPagerAdapter {
     private boolean[] isBlues = new boolean[3];
     float p1,p2;
     String location;
+    String zip;
 
-    public GridPagerAdapter(JSONArray ja, Context ctx, FragmentManager fm) {
+    public GridPagerAdapter(String z, JSONArray ja, Context ctx, FragmentManager fm) {
         super(fm);
         mContext = ctx;
+        zip = z;
         try{
 
             for(int i = 0; i < 3; i++){
@@ -107,7 +109,7 @@ private class VotePage extends Page{
 //        String text = page.textRes != 0 ? mContext.getString(page.textRes) : null;
         if(page.isCandidate){
             CandidatePage cp = (CandidatePage) page;
-            return CandidateFragment.create(page.isBlue, cp.title, cp.name);
+            return CandidateFragment.create(page.isBlue, cp.title, cp.name, zip);
         }else{
             VotePage vp = (VotePage) page;
             return VoteFragment.create(vp.isBlue,vp.location, vp.percentages);

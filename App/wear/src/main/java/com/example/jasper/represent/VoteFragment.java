@@ -1,11 +1,14 @@
 package com.example.jasper.represent;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -38,8 +41,9 @@ public class VoteFragment extends Fragment {
         subtitleV = (TextView)v.findViewById(R.id.percentages);
         subtitleV.setText((String)getArguments().get("subtitle"));
         if(!getArguments().getBoolean("isblue")){
-            v.findViewById(R.id.back_color).setBackgroundColor(16721960);
+            v.findViewById(R.id.back_color).setBackgroundColor(Color.parseColor("#FF2C2C"));
         }
+
         return v;
     }
 }

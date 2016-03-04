@@ -14,6 +14,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by joleary and noon on 2/19/16 at very late in the night. (early in the morning?)
@@ -22,6 +23,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
 
     private GoogleApiClient mWatchApiClient;
     private List<Node> nodes = new ArrayList<>();
+    private ArrayList<String> message = new ArrayList<String>();
 
     @Override
     public void onCreate() {
@@ -34,6 +36,41 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
         //and actually connect it
         mWatchApiClient.connect();
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent != null){
+            Log.d("T", "intent not null");
+            Bundle extras = intent.getExtras();
+            String cmd = extras.getString("cmd");
+            message = new ArrayList<String>();
+            if(cmd.equals("zip")){
+                message.add("/zip");
+                message.add(extras.getString("zip"));
+            }else if(cmd.equals("details")){
+                message.add("/details");
+                message.add(extras.getString("zip")+"!"+extras.getString("name"));
+            }
+        }
+
+        Log.d("T", "start of onStartCommand");
+        if(nodes.size() == 0){
+            mWatchApiClient = new GoogleApiClient.Builder( this )
+                    .addApi( Wearable.API )
+                    .addConnectionCallbacks(this)
+                    .build();
+        }
+
+        if(!mWatchApiClient.isConnected()){
+            mWatchApiClient.connect();
+        }
+        Log.d("T", "Message is " + message);
+        Log.d("T", "Trying to send message " + message);
+        sendMessage(message.get(0), message.get(1));
+        Log.d("T", "sent");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -54,12 +91,11 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                 .setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
                     @Override
                     public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
-                        nodes = getConnectedNodesResult.getNodes();
-                        Log.d("T", "found nodes");
-                        //when we find a connected node, we populate the list declared above
-                        //finally, we can send a message
-                        sendMessage("/send_toast", "Good job!");
-                        Log.d("T", "sent");
+                        if (message.size() > 0) {
+                            nodes = getConnectedNodesResult.getNodes();
+                            Log.d("T", "found nodes");
+                            sendMessage(message.get(0), message.get(1));
+                        }
                     }
                 });
     }
@@ -71,6 +107,8 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
         for (Node node : nodes) {
             Wearable.MessageApi.sendMessage(
                     mWatchApiClient, node.getId(), path, text.getBytes());
+            Log.d("T", "Trying to send message " + path+" "+text+" to "+node);
+
         }
     }
 

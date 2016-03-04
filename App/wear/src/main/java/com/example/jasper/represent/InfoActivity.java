@@ -42,16 +42,15 @@ public class InfoActivity extends Activity{
             obj = new JSONObject(json);
 
 
-            if(zip.equals("21042")){
-                repArray = obj.getJSONArray(zip);
-            }else{
-                repArray = obj.getJSONArray("94704");
+            if(!zip.equals("21042")){
+                zip = "94704";
             }
+            repArray = obj.getJSONArray(zip);
         }catch(Exception e){
 
         }
 
-        pager.setAdapter(new GridPagerAdapter(repArray, this, getFragmentManager()));
+        pager.setAdapter(new GridPagerAdapter(zip, repArray, this, getFragmentManager()));
 
          /* do this in onCreate */
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -109,8 +108,17 @@ public class InfoActivity extends Activity{
 
     protected void startRandom(int a) {
         Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("cmd", "zip");
         intent.putExtra("zip", a+"");
+
+        Intent sendIntent = new Intent(this, WatchToPhoneService.class);
+        sendIntent.putExtra("cmd", "zip");
+        sendIntent.putExtra("zip", a+"");
+        startService(sendIntent);
+
         startActivity(intent);
+
+
     }
 }
 

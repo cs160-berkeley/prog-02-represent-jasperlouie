@@ -91,11 +91,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
         animation.setDuration(200).start();
     }
-//
-//    private void collapseTextView(TextView tv, int numLines){
-//        ObjectAnimator animation = ObjectAnimator.ofInt(tv, "maxLines", numLines);
-//        animation.setDuration(200).start();
-//    }
 
 
 }
