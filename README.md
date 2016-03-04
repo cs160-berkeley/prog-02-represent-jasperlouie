@@ -1,20 +1,25 @@
 # PROG 02: Represent!
+An app for the Android phone and Android wear devices that lets you view information on your congressional representatives as well as your county's voting record.
 
-Briefly describe your app here.
 
 ## Authors
 
-FirstName LastName ([your_email@berkeley.edu](mailto:your_email@berkeley.edu))
+Jasper Louie ([jasper.louie@berkeley.edu](mailto:jasper.louie@berkeley.edu))
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+See CS160 PROG-02B (https://youtu.be/nxtCuVVZvTo)
 
 ## Screenshots
 
+<img src="screenshots/locate.png" height="400" alt="Screenshot"/>
 <img src="screenshots/main.png" height="400" alt="Screenshot"/>
+<img src="screenshots/details.png" height="400" alt="Screenshot"/>
+<img src="screenshots/details2.png" height="400" alt="Screenshot"/>
+<img src="screenshots/watch1.png" height="400" alt="Screenshot"/>
+<img src="screenshots/watchvote.png" height="400" alt="Screenshot"/>
 
 ## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Any other support
+Some sample code I used:
+Expandable Textviews: http://stackoverflow.com/questions/15627530/android-expandable-textview-with-animation
+2dPicker: http://developer.android.com/training/wearables/ui/2d-picker.html
