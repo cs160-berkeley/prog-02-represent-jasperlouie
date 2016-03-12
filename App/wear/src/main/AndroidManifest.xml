@@ -27,6 +27,10 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d3a494c90a6e2b92b9af0bd1ac19ea536e2b0f2d" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

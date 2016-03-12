@@ -37,7 +37,7 @@
                 android:id="@+id/card_view1"
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
                 card_view:cardCornerRadius="5dp"
                 <LinearLayout
@@ -47,14 +47,14 @@
 
                     <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="110dp"
+                        android:layout_width="80dp"
                         android:layout_height="150dp"
                         android:minWidth="110dp">
 
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
                             android:id="@+id/portrait1"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/diannefeinstein" />
@@ -64,7 +64,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/partyIcon1"
                             android:layout_weight="1"
-                            android:src="@drawable/democraticon"
+                            android:src="@drawable/d"
                             android:layout_gravity="center_horizontal" />
 
                     </LinearLayout>
@@ -72,7 +72,7 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="right">
 
@@ -126,8 +126,9 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:weightSum="1">
+                            android:layout_height="wrap_content"
+                            android:weightSum="1"
+                            android:id="@+id/TwitterLayout1">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -153,7 +154,7 @@
                 android:id="@+id/card_view2"
                 android:layout_gravity="center"
                 android:layout_width="fill_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
                 card_view:cardCornerRadius="5dp"
                 <LinearLayout
@@ -163,14 +164,14 @@
 
                     <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="110dp"
+                        android:layout_width="80dp"
                         android:layout_height="150dp"
                         android:minWidth="110dp">
 
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
                             android:id="@+id/portrait2"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/diannefeinstein" />
@@ -180,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/partyIcon2"
                             android:layout_weight="1"
-                            android:src="@drawable/democraticon"
+                            android:src="@drawable/d"
                             android:layout_gravity="center_horizontal" />
 
                     </LinearLayout>
@@ -188,7 +189,7 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="right">
 
@@ -242,8 +243,9 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:weightSum="1">
+                            android:layout_height="wrap_content"
+                            android:weightSum="1"
+                            android:id="@+id/TwitterLayout2">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -279,16 +281,15 @@
 
                     <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="110dp"
+                        android:layout_width="80dp"
                         android:layout_height="150dp"
                         android:minWidth="110dp">
 
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
                             android:id="@+id/portrait3"
-                            android:layout_gravity="center_vertical"
                             android:src="@drawable/diannefeinstein" />
 
                         <ImageView
@@ -296,7 +297,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/partyIcon3"
                             android:layout_weight="1"
-                            android:src="@drawable/democraticon"
+                            android:src="@drawable/d"
                             android:layout_gravity="center_horizontal" />
 
                     </LinearLayout>
@@ -359,7 +360,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:weightSum="1">
+                            android:weightSum="1"
+                            android:id="@+id/TwitterLayout3">
 
                             <ImageView
                                 android:layout_width="wrap_content"

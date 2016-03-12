@@ -13,30 +13,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="committees">"Vice Chairman, Senate Select Committee on Intelligence Senate Committee on Appropriations
-
-Ranking Member, Subcommittee on Energy and Water Development
-
-Member, Subcommittee on Agriculture, Rural Development, Food and Drug Administration, and Related Agencies
-
-Member, Subcommittee on Commerce, Justice, Science, and Related Agencies
-
-Member, Subcommittee on Department of Defense"
-    </string>
-
-    <string name="bills">
-"S. 2552 (2/11/16): A bill to amend section 875 of title 18, United States Code, to …
-
-S. 2533 (2/10/16): California Long-Term Provisions for Water Supply and Short-Term Provisions for Emergency Drought Relief …
-
-S. 2442: A bill to authorize the use of passenger facility charges at an airport …
-
-S. 2422: Fiscal Year 2016 Department of Veterans Affairs Seismic Safety and Construction Authorization Act
-
-S. 2372: Requiring Reporting of Online Terrorist Activity Act
-
-S. 2337: Visa Waiver Program Security Enhancement Act
-
-S.Res. 299: A resolution honoring the life, legacy, and example of former Israeli Prime Minister …
-    "</string>
+    <string name="committees">Loading...</string>
+    <string name="bills">Loading...</string>
 </resources>

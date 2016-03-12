@@ -3,6 +3,7 @@
     package="com.example.jasper.represent">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -50,8 +51,15 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d3a494c90a6e2b92b9af0bd1ac19ea536e2b0f2d" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

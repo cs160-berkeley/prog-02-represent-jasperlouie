@@ -51,11 +51,12 @@
 
 
                             <ImageView
-                                android:layout_width="wrap_content"
+                                android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/portrait1"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/diannefeinstein" />
+                                android:layout_gravity="top"
+                                android:src="@drawable/diannefeinstein"
+                                android:layout_marginRight="7dp" />
 
                         </LinearLayout>
 
@@ -85,7 +86,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/partyIcon1"
-                                    android:src="@drawable/democraticon" />
+                                    android:src="@drawable/d" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -149,7 +150,7 @@
                         android:paddingLeft="3dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="@string/committees"
