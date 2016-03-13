@@ -8,7 +8,7 @@ Jasper Louie ([jasper.louie@berkeley.edu](mailto:jasper.louie@berkeley.edu))
 
 ## Demo Video
 
-See CS160 PROG-02B (https://youtu.be/nxtCuVVZvTo)
+See a CS160 PROG-02C video demonstration (https://youtu.be/-qy_Qyaieys)
 
 ## Screenshots
 
@@ -18,8 +18,10 @@ See CS160 PROG-02B (https://youtu.be/nxtCuVVZvTo)
 <img src="screenshots/details2.png" height="400" alt="Screenshot"/>
 <img src="screenshots/watch1.png" height="400" alt="Screenshot"/>
 <img src="screenshots/watchvote.png" height="400" alt="Screenshot"/>
+<img src="screenshots/independent.png" height="400" alt="Screenshot"/>
 
 ## Acknowledgments
 Some sample code I used:
 Expandable Textviews: http://stackoverflow.com/questions/15627530/android-expandable-textview-with-animation
 2dPicker: http://developer.android.com/training/wearables/ui/2d-picker.html
+Makes use of Congressional API by SunlightFoundation, Google Geocode API, and Twitter API.

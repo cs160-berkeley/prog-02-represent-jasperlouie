@@ -469,7 +469,43 @@ public class CongressActivity extends AppCompatActivity {
                 try {
                     ((TextView) v.findViewById(R.id.title1)).setText(jo.getString("first_name") + " " + jo.getString("last_name"));
                     ((TextView) v.findViewById(R.id.websiteText1)).setText(jo.getString("website"));
+                    ((TextView) v.findViewById(R.id.websiteText1)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            try {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(jo.getString("website")));
+                                startActivity(browserIntent);
+
+                            } catch (Exception e) {
+
+                            }
+
+                        }
+                    });
                     ((TextView) v.findViewById(R.id.emailText1)).setText(jo.getString("oc_email"));
+
+                    ((TextView) v.findViewById(R.id.emailText1)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            /* Create the Intent */
+                            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+                            /* Fill it with Data */
+                            emailIntent.setType("plain/text");
+                            try{
+                                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{jo.getString("oc_email")});
+
+                            }catch(Exception e){
+
+                            }
+                            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Hi");
+                            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Text");
+
+                            /* Send it off to the Activity-Chooser */
+                            context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                        }
+                    });
                     int imageID = v.getResources().getIdentifier("drawable/" + jo.getString("party").toLowerCase(), null, context.getPackageName());
                     ((ImageView) v.findViewById(R.id.partyIcon1)).setImageResource(imageID);
                     ((ImageView) v.findViewById(R.id.partyIcon1)).setVisibility(View.VISIBLE);

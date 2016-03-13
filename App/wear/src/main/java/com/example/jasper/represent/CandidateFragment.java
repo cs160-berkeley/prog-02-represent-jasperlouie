@@ -58,6 +58,19 @@ public class CandidateFragment extends Fragment {
             ((ImageView) v.findViewById(R.id.portrait)).setImageResource(imageID);
         }
 
+        try{
+//                    String j =
+//                    Log.d("T", "FAILLLLL");
+            JSONObject jo = new JSONObject(getArguments().getString("json"));
+            if(jo.getString("party").equals("I")){
+                v.findViewById(R.id.back_color).setBackgroundColor(Color.parseColor("#7A7A7A"));
+                ((ImageView) v.findViewById(R.id.portrait)).setVisibility(View.INVISIBLE);
+            }
+
+        }catch(Exception e){
+            Log.d("T", "FAILLLLL");
+        }
+
         ((LinearLayout)v.findViewById(R.id.whole_layout)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +81,7 @@ public class CandidateFragment extends Fragment {
 //                    String j =
 //                    Log.d("T", "FAILLLLL");
                     jo = new JSONObject(getArguments().getString("json"));
+
                 }catch(Exception e){
                     Log.d("T", "FAILLLLL");
                 }
