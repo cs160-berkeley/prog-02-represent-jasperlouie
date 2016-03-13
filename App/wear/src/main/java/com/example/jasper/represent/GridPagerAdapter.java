@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.graphics.drawable.Drawable;
 import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -22,30 +23,39 @@ public class GridPagerAdapter extends FragmentGridPagerAdapter {
 
     private final Context mContext;
     private List mRows;
-    private String[] names = new String[3];
-    private String[] titles = new String[3];
-    private boolean[] isBlues = new boolean[3];
+    private String[] names = new String[6];
+    private String[] titles = new String[6];
+    private boolean[] isBlues = new boolean[6];
+    private JSONObject[] jos = new JSONObject[6];
     float p1,p2;
     String location;
     String zip;
+    int numCand;
 
-    public GridPagerAdapter(String z, JSONArray ja, Context ctx, FragmentManager fm) {
+    public GridPagerAdapter(String z, Context ctx, FragmentManager fm) {
         super(fm);
         mContext = ctx;
-        zip = z;
+        JSONArray ja = new JSONArray();
         try{
-
-            for(int i = 0; i < 3; i++){
-                JSONObject jo = ja.getJSONObject(i);
-                names[i] = jo.getString("name");
-                titles[i] = jo.getString("shorttitle");
-                isBlues[i] = jo.getString("party").equals("democrat");
-
+            ja = new JSONArray(z);
+        }catch (Exception e){
+            Log.d("T", "Corrupted message recieved: "+z);
+        }
+//        Log.d("T", "Making grid page adapter, "+arr.toString());
+        try{
+            numCand = ja.length()-1;
+            for(int i = 0; i < ja.length() - 1; i++){
+//                JSONObject jo = ja.getJSONObject(i);
+                jos[i] = ja.getJSONObject(i);
+                JSONObject repObj = ja.getJSONObject(i);
+                names[i] = repObj.getString("first_name")+" "+repObj.getString("last_name");
+                titles[i] = repObj.getString("title");
+                isBlues[i] = repObj.getString("party").equals("D");
             }
-
-            p1 = Float.parseFloat(ja.getJSONObject(3).getString("per1"));
-            p2 = Float.parseFloat(ja.getJSONObject(3).getString("per2"));
-            location = ja.getJSONObject(3).getString("location");
+            location = ja.getString(ja.length() - 1);
+//            p1 = Float.parseFloat(ja.getJSONObject(3).getString("per1"));
+//            p2 = Float.parseFloat(ja.getJSONObject(3).getString("per2"));
+//            location = ja.getJSONObject(3).getString("locatio/n");
         }catch (Exception e){
 
         }
@@ -68,25 +78,18 @@ private class CandidatePage extends Page{
     String title;
     String name;
     //    int portraitRes;
-    private CandidatePage(boolean ic, boolean ib, String t, String n){
-        title = t;
+    private CandidatePage(boolean ic, String t, boolean ib, String n){
         isBlue = ib;
         name = n;
         isCandidate = ic;
+        title = t;
     }
 }
 
 private class VotePage extends Page{
     // static resources
-    boolean isCandidate;
-    boolean isBlue;
-    String location, percentages;
     //    int portraitRes;
-    private VotePage(boolean ic, boolean ib, String l, String per1, String per2){
-        location = l;
-        isBlue = ib;
-        percentages = per1 + "          " + per2;
-        isCandidate = ic;
+    private VotePage(String county){
     }
 }
 // Create a static set of pages in a 2D array
@@ -99,20 +102,21 @@ private class VotePage extends Page{
     @Override
     public Fragment getFragment(int row, int col) {
         Page page;
-        if(col < 3){
-            page = new CandidatePage(true, isBlues[col], titles[col], names[col]);
+        if(col < numCand){
+            page = new CandidatePage(true, titles[col], isBlues[col], names[col]);
         }else{
-            page = new VotePage(false, p1 > p2, location, p1+"%",p2+"%");
+            page = new VotePage(location);
         }
 
 //        String title = page.titleRes != 0 ? mContext.getString(page.titleRes) : null;
 //        String text = page.textRes != 0 ? mContext.getString(page.textRes) : null;
         if(page.isCandidate){
             CandidatePage cp = (CandidatePage) page;
-            return CandidateFragment.create(page.isBlue, cp.title, cp.name, zip);
+            Log.d("T", "making cand page with "+jos[col].toString());
+            return CandidateFragment.create(page.isBlue, cp.title, cp.name, zip, jos[col]);
         }else{
             VotePage vp = (VotePage) page;
-            return VoteFragment.create(vp.isBlue,vp.location, vp.percentages);
+            return VoteFragment.create(location);
         }
     }
 
@@ -130,6 +134,6 @@ private class VotePage extends Page{
     // Obtain the number of pages (horizontal)
     @Override
     public int getColumnCount(int rowNum) {
-        return 4;
+        return numCand+1;
     }
 }

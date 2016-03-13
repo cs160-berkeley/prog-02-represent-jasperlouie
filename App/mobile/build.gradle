@@ -12,6 +12,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 
@@ -42,6 +43,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:cardview-v7:23.0.+'
+//    compile 'com.google.maps:google-maps-services:0.1.7'
     compile('com.twitter.sdk.android:twitter:1.13.0@aar') {
         transitive = true;
     }

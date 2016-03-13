@@ -49,7 +49,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                 message.add(extras.getString("zip"));
             }else if(cmd.equals("details")){
                 message.add("/details");
-                message.add(extras.getString("zip")+"!"+extras.getString("name"));
+                message.add(extras.getString("json"));
             }
         }
 

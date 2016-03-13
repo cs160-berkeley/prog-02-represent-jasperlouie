@@ -105,13 +105,7 @@ public class LocateActivity extends AppCompatActivity {
             intent.putExtra("zip", zip);
             intent.putExtra("useZip", true);
 
-            Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
-            if(zip.equals("21042")){
-                sendIntent.putExtra("zip", "21042");
-            }else {
-                sendIntent.putExtra("zip", "94704");
-            }
-            startService(sendIntent);
+
             startActivity(intent);
         }else{
             /* Use the LocationManager class to obtain GPS locations */

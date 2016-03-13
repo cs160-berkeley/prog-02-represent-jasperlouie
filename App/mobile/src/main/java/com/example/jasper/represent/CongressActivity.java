@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserServiceCompat;
@@ -16,13 +17,19 @@ import android.support.v7.util.SortedList;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -49,6 +56,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -64,23 +72,33 @@ import retrofit.http.Query;
 public class CongressActivity extends AppCompatActivity {
     String SUNLIGHT_API_KEY = "aaa24083b491487aa9edd05b83bb32ee";
     //UI references
+    private ArrayList<RepCard> rCards;
+    private RepAdapter rAdapter;
     private ArrayList<CardView> cards;
     private ArrayList<TextView> names, websites, emails, tweets;
     private ArrayList<ImageView> portraits, partyIcons;
     private TextView location;
-    private ArrayList<Bitmap> bmps;
+    String currentCounty;
+    String s;
+    JSONArray repArray;
 
     private ArrayList<String> dicts;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_congress);
 
-        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
+        TwitterAuthConfig authConfig = new TwitterAuthConfig("consumerKey", "consumerSecret");
         Fabric.with(this, new Twitter(authConfig));
         TwitterCore.getInstance().logInGuest(null);
 
 //        Grab zip from intent
+        BitmapKeeper.bitmaps = new HashMap<String, Bitmap>();
         String zip = "";
         String latitude = "";
         String longitude = "";
@@ -124,105 +142,67 @@ public class CongressActivity extends AppCompatActivity {
 //        Todo: make repcard layout that is constructed by taking json string and interpretting
 
         location = (TextView) findViewById(R.id.location);
+
         if (zip.equals("")) {
-            location.setText("Alameda County");
+//            Log.d("T", "zip: "+zip);
+            new CountyGetter().execute("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=AIzaSyCiQ0pcOW_wQ_lIR-EzoEYatyrRZOYl4aU");
         } else {
-            location.setText("ZIP: " + zip);
+//            Log.d()
+            new CountyGetter().execute("https://maps.googleapis.com/maps/api/geocode/json?address=" + zip + "&key=AIzaSyCiQ0pcOW_wQ_lIR-EzoEYatyrRZOYl4aU");
+
         }
 
-        bmps = new ArrayList<Bitmap>();
-        cards = new ArrayList<CardView>();
-        cards.add((CardView) findViewById(R.id.card_view1));
-        cards.add((CardView) findViewById(R.id.card_view2));
-        cards.add((CardView) findViewById(R.id.card_view3));
 
-        names = new ArrayList<TextView>();
-        names.add((TextView) findViewById(R.id.title1));
-        names.add((TextView) findViewById(R.id.title2));
-        names.add((TextView) findViewById(R.id.title3));
-
-        websites = new ArrayList<TextView>();
-        websites.add((TextView) findViewById(R.id.websiteText1));
-        websites.add((TextView) findViewById(R.id.websiteText2));
-        websites.add((TextView) findViewById(R.id.websiteText3));
-
-        emails = new ArrayList<TextView>();
-        emails.add((TextView) findViewById(R.id.emailText1));
-        emails.add((TextView) findViewById(R.id.emailText2));
-        emails.add((TextView) findViewById(R.id.emailText3));
-
-        tweets = new ArrayList<TextView>();
-        tweets.add((TextView) findViewById(R.id.twitterText1));
-        tweets.add((TextView) findViewById(R.id.twitterText2));
-        tweets.add((TextView) findViewById(R.id.twitterText3));
-
-        portraits = new ArrayList<ImageView>();
-        portraits.add((ImageView) findViewById(R.id.portrait1));
-        portraits.add((ImageView) findViewById(R.id.portrait2));
-        portraits.add((ImageView) findViewById(R.id.portrait3));
-
-        partyIcons = new ArrayList<ImageView>();
-        partyIcons.add((ImageView) findViewById(R.id.partyIcon1));
-        partyIcons.add((ImageView) findViewById(R.id.partyIcon2));
-        partyIcons.add((ImageView) findViewById(R.id.partyIcon3));
-
-//        dicts = new ArrayList<String>();
-//        JSONObject obj = null;
-//        try {
-//            InputStream is = this.getResources().openRawResource(R.raw.data);
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//            String json = new String(buffer, "UTF-8");
-//            obj = new JSONObject(json);
-//
-//            JSONArray repArray = null;
-//            if(zip.equals("21042")){
-//                repArray = obj.getJSONArray(zip);
-//            }else{
-//                repArray = obj.getJSONArray("94704");
-//            }
-//
-//            for(int i = 0; i < 3; i++){
-//                JSONObject jo = (JSONObject) repArray.get(i);
-//                dicts.add(jo.toString());
-//                names.get(i).setText(jo.getString("name"));
-//                websites.get(i).setText(jo.getString("website"));
-//                emails.get(i).setText(jo.getString("email"));
-//                tweets.get(i).setText(jo.getString("tweet"));
-//                String img_name = jo.getString("name").replaceAll("[^A-Za-z]+", "").toLowerCase();
-//                int imageID = this.getResources().getIdentifier("drawable/" + img_name, null, this.getPackageName());
-//                portraits.get(i).setImageResource(imageID);
-//                imageID = this.getResources().getIdentifier("drawable/"+jo.getString("party")+"icon", null, this.getPackageName());
-//                partyIcons.get(i).setImageResource(imageID);
-//
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        rCards = new ArrayList<RepCard>();
+        rAdapter = new RepAdapter(this, 0, rCards);
+        ((ListView) this.findViewById(R.id.listView)).setAdapter(rAdapter);
 
 
-        for (int i = 0; i < 3; i++) {
-            final int finalI = i;
-            cards.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    goToDetails(finalI);
-                }
-            });
-        }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private void goToDetails(int i) {
-        //do nothing for now besides go to next screen
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra("json", dicts.get(i));
-        byte[] s = bitmapToBA(bmps.get(i));
-        intent.putExtra("portrait", s);
-        startActivity(intent);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Congress Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.jasper.represent/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Congress Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.jasper.represent/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
 
     // Uses AsyncTask to create a task away from the main UI thread. This task takes a
     // URL string and uses it to create an HttpUrlConnection. Once the connection
@@ -264,36 +244,36 @@ public class CongressActivity extends AppCompatActivity {
 //                is.close();
 //                String json = new String(buffer, "UTF-8");
                 obj = new JSONObject(result);
-                JSONArray repArray = obj.getJSONArray("results");
+                repArray = obj.getJSONArray("results");
 //                if(zip.equals("21042")){
 //                    repArray = obj.getJSONArray(zip);
 //                }else{
 //                    repArray = obj.getJSONArray("94704");
 //                }
-
-                for (int i = 0; i < 3; i++) {
-                    bmps.add(null);
+                s = "";
+                for (int i = 0; i < repArray.length(); i++) {
+//                    bmps.add(null);
                     JSONObject jo = (JSONObject) repArray.get(i);
-                    dicts.add(jo.toString());
-                    names.get(i).setText(jo.getString("first_name") + " " + jo.getString("last_name"));
-                    websites.get(i).setText(jo.getString("website"));
-                    emails.get(i).setText(jo.getString("oc_email"));
-//                    tweets.get(i).setText("Placeholder");
-                    String img_name = "barbaraboxer".replaceAll("[^A-Za-z]+", "").toLowerCase();
-                    int imageID = myActivity.getResources().getIdentifier("drawable/" + img_name, null, myActivity.getPackageName());
-                    portraits.get(i).setImageResource(imageID);
-                    imageID = myActivity.getResources().getIdentifier("drawable/" + jo.getString("party").toLowerCase(), null, myActivity.getPackageName());
-                    partyIcons.get(i).setImageResource(imageID);
+                    if (jo.getString("title").equals("Sen")) {
+                        s += "Senator!";
+                    } else {
+                        s += "Representative!";
+                    }
+
+                    s += jo.getString("first_name") + " " + jo.getString("last_name") + "!";
+                    s += jo.getString("party") + "!";
+                    rCards.add(new RepCard(jo, null, null));
+                    rAdapter.notifyDataSetChanged();
 
 //                    TwitterSession session =
 //                            Twitter.getSessionManager().getActiveSession();
 //                    TwitterAuthToken authToken = session.getAuthToken();
                     String token = "cyuDq9b27fEKQWU6xtoTk1ZTZ";
                     String secret = "9pd4duKsNzlF4MGNlV3wafCkyNJLKqjoc5BhH0YuDQ73cFxrlg";
-                    TwitterApiClient twitterApiClient =  Twitter.getApiClient();
+                    TwitterApiClient twitterApiClient = Twitter.getApiClient();
                     StatusesService twapiclient = twitterApiClient.getStatusesService();
                     final int finalI = i;
-                    twapiclient.userTimeline(null, jo.getString("twitter_id"), null, (long)1, null, null, null, null, null, new Callback<List<Tweet>>() {
+                    twapiclient.userTimeline(null, jo.getString("twitter_id"), null, (long) 1, null, null, null, null, null, new Callback<List<Tweet>>() {
                         @Override
                         public void success(Result<List<Tweet>> listResult) {
 
@@ -301,9 +281,11 @@ public class CongressActivity extends AppCompatActivity {
                             System.out.println("listResult" + listResult.data.get(0).user);
                             System.out.println("listResult" + listResult.data.get(0).user.profileImageUrl);
                             String picUrl = listResult.data.get(0).user.profileImageUrl;
-                            ((TextView)tweets.get(finalI)).setText(listResult.data.get(0).text);
+                            rCards.get(finalI).tweet = listResult.data.get(0).text;
+                            rAdapter.notifyDataSetChanged();
+//                            ((TextView)tweets.get(finalI)).setText(listResult.data.get(0).text);
 //                            userInfo.imageurl = listResult.data.get(0).user.profileImageUrl;
-                            new ImageDownloader(portraits.get(finalI), finalI)
+                            new ImageDownloader(finalI)
                                     .execute(picUrl.replace("_normal", ""));
 
                         }
@@ -315,28 +297,8 @@ public class CongressActivity extends AppCompatActivity {
                     });
 
 
-//                    // TODO: Use a more specific parent
-////                    final ViewGroup parentView = (ViewGroup) getWindow().getDecorView().getRootView();
-//                    // TODO: Base this Tweet ID on some data from elsewhere in your app
-//                    long tweetId = 631879971628183552L;
-//                    final int finalI = i;
-//                    TweetUtils.loadTweet(tweetId, new Callback<Tweet>() {
-//                        @Override
-//                        public void success(Result<Tweet> result) {
-//                            CompactTweetView tweetView = new CompactTweetView(CongressActivity.this, result.data);
-//                            final int x = finalI;
-//                            tweets.get(x).addView(tweetView);
-//
-//                        }
-//
-//                        @Override
-//                        public void failure(TwitterException exception) {
-//                            Log.d("TwitterKit", "Load Tweet failure", exception);
-//                        }
-//                    });
-
-
                 }
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -388,7 +350,7 @@ public class CongressActivity extends AppCompatActivity {
         int i;
         ImageView bmImage;
 
-        public ImageDownloader(ImageView bmImage, int in) {
+        public ImageDownloader(int in) {
             this.bmImage = bmImage;
             i = in;
         }
@@ -397,7 +359,7 @@ public class CongressActivity extends AppCompatActivity {
             String url = urls[0];
             Bitmap mIcon = null;
             try {
-                InputStream in = new java.net.URL(url).openStream();
+                InputStream in = new URL(url).openStream();
                 mIcon = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -406,15 +368,150 @@ public class CongressActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmps.set(i, result);
-            bmImage.setImageBitmap(result);
+//            bmps.set(i, result);
+//            bmImage.setImageBitmap(result);
+            rCards.get(i).b = result;
+            try{
+                BitmapKeeper.bitmaps.put(rCards.get(i).jo.getString("bioguide_id"), result);
+
+            }catch(Exception e){
+
+            }
+            rAdapter.notifyDataSetChanged();
+
         }
     }
 
-    public final static byte[] bitmapToBA(Bitmap in){
+    class CountyGetter extends AsyncTask<String, Void, String> {
+        String url;
+
+        protected String doInBackground(String... urls) {
+            String url = urls[0];
+            String out = "";
+            try {
+                InputStream in = new URL(url).openStream();
+                out = readIt(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+            }
+
+            return out;
+        }
+
+        protected void onPostExecute(String result) {
+//            bmps.set(i, result);
+//            bmImage.setImageBitmap(result);
+            Log.d("T", "wahhhhhhh" + result);
+            String c = "";
+            try {
+                JSONObject jo = new JSONObject(result);
+                JSONArray arr = jo.getJSONArray("results");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject jo2 = arr.getJSONObject(i);
+                    JSONArray address_comps = jo2.getJSONArray("address_components");
+                    for (int j = 0; j < address_comps.length(); j++) {
+                        JSONArray t = address_comps.getJSONObject(j).getJSONArray("types");
+                        for (int k = 0; k < t.length(); k++) {
+                            if (t.getString(k).equals("administrative_area_level_2")) {
+                                c = address_comps.getJSONObject(j).getString("short_name");
+                                break;
+                            }
+                        }
+
+                    }
+
+                }
+            } catch (Exception e) {
+
+            }
+
+            Log.d("T", "Successfully got county:" + c);
+            currentCounty = c;
+            Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+            repArray.put(c);
+            sendIntent.putExtra("zip", repArray.toString());
+            Log.d("T", "message length: " + repArray.toString().length());
+            Log.d("T", "message "+ repArray.toString());
+
+            startService(sendIntent);
+
+        }
+    }
+
+    public final static byte[] bitmapToBA(Bitmap in) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         in.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         return bytes.toByteArray();
+    }
+
+    private class RepAdapter extends ArrayAdapter<RepCard> {
+
+        private ArrayList<RepCard> items;
+        Context context;
+
+        public RepAdapter(Context context, int textViewResourceId, ArrayList<RepCard> items) {
+            super(context, textViewResourceId, items);
+            this.items = items;
+            this.context = context;
+
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            View v = convertView;
+            if (v == null) {
+                LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(R.layout.card, null);
+            }
+            final JSONObject jo = items.get(position).jo;
+            if (jo != null) {
+                try {
+                    ((TextView) v.findViewById(R.id.title1)).setText(jo.getString("first_name") + " " + jo.getString("last_name"));
+                    ((TextView) v.findViewById(R.id.websiteText1)).setText(jo.getString("website"));
+                    ((TextView) v.findViewById(R.id.emailText1)).setText(jo.getString("oc_email"));
+                    int imageID = v.getResources().getIdentifier("drawable/" + jo.getString("party").toLowerCase(), null, context.getPackageName());
+                    ((ImageView) v.findViewById(R.id.partyIcon1)).setImageResource(imageID);
+                    ((ImageView) v.findViewById(R.id.partyIcon1)).setVisibility(View.VISIBLE);
+
+                    ((CardView) v.findViewById(R.id.card_view1)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, DetailsActivity.class);
+                            intent.putExtra("json", items.get(position).jo.toString());
+                            byte[] s = bitmapToBA(items.get(position).b);
+                            intent.putExtra("portrait", s);
+                            startActivity(intent);
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+            }
+            Bitmap b = items.get(position).b;
+            if (b != null) {
+                ((ImageView) v.findViewById(R.id.portrait1)).setImageBitmap(b);
+                ((ImageView) v.findViewById(R.id.portrait1)).setVisibility(View.VISIBLE);
+            }
+
+            String t = items.get(position).tweet;
+            if (t != null) {
+                ((TextView) v.findViewById(R.id.twitterText1)).setText(t);
+            }
+            return v;
+        }
+    }
+
+    private class RepCard {
+        JSONObject jo;
+        Bitmap b;
+        String tweet;
+
+        RepCard(JSONObject j, Bitmap m, String t) {
+            jo = j;
+            b = m;
+            tweet = t;
+        }
     }
 }
 

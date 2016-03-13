@@ -40,27 +40,8 @@ public class InfoActivity extends Activity{
         }catch(Exception e){
             zip = "94704";
         }
-        JSONObject obj;
-        JSONArray repArray = null;
-        try{
-            InputStream is = this.getResources().openRawResource(R.raw.data);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String json = new String(buffer, "UTF-8");
-            obj = new JSONObject(json);
 
-
-            if(!zip.equals("21042")){
-                zip = "94704";
-            }
-            repArray = obj.getJSONArray(zip);
-        }catch(Exception e){
-
-        }
-
-        pager.setAdapter(new GridPagerAdapter(zip, repArray, this, getFragmentManager()));
+        pager.setAdapter(new GridPagerAdapter(zip, this, getFragmentManager()));
 
          /* do this in onCreate */
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -88,8 +69,8 @@ public class InfoActivity extends Activity{
 
             if (mAccel > 12) {
                 int a = randomZip();
-                Toast toast = Toast.makeText(getApplicationContext(), "Going to random Zip Code: "+a+".", Toast.LENGTH_LONG);
-                toast.show();
+//                Toast toast = Toast.makeText(getApplicationContext(), "Going to random Zip Code: "+a+".", Toast.LENGTH_LONG);
+//                toast.show();
                 startRandom(a);
             }
         }
@@ -117,16 +98,13 @@ public class InfoActivity extends Activity{
     }
 
     protected void startRandom(int a) {
-        Intent intent = new Intent(this, InfoActivity.class);
-        intent.putExtra("cmd", "zip");
-        intent.putExtra("zip", a+"");
+
 
         Intent sendIntent = new Intent(this, WatchToPhoneService.class);
         sendIntent.putExtra("cmd", "zip");
         sendIntent.putExtra("zip", a+"");
         startService(sendIntent);
 
-        startActivity(intent);
 
 
     }

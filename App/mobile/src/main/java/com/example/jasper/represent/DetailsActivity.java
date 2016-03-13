@@ -49,7 +49,7 @@ public class DetailsActivity extends AppCompatActivity {
             jo = new JSONObject(intent.getExtras().getString("json"));
             Log.d("T", "Making detail view using this info: ");
             Log.d("T", jo.toString());
-            ((TextView) findViewById(R.id.title1)).setText(jo.getString("title")+" "+jo.getString("first_name") + " " + jo.getString("last_name"));
+            ((TextView) findViewById(R.id.title1)).setText(jo.getString("title") + " " + jo.getString("first_name") + " " + jo.getString("last_name"));
             String p = jo.getString("party");
             if(p.equals("D")){
                 p = "Democrat";
@@ -70,7 +70,12 @@ public class DetailsActivity extends AppCompatActivity {
             ((ImageView) findViewById(R.id.partyIcon1)).setImageResource(imageID);
 
             byte[] bmp = intent.getExtras().getByteArray("portrait");
-            Bitmap pic = BitmapFactory.decodeByteArray(bmp, 0, bmp.length);
+            Bitmap pic = null;
+            if(bmp == null){
+                pic = BitmapKeeper.bitmaps.get(jo.getString("bioguide_id"));
+            }else{
+                pic = BitmapFactory.decodeByteArray(bmp, 0, bmp.length);
+            }
             ((ImageView) findViewById(R.id.portrait1)).setImageBitmap(pic);
         }catch (Exception e){}
 

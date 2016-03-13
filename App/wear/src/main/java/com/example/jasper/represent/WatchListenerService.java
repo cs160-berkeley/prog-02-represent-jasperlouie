@@ -26,7 +26,7 @@ public class WatchListenerService extends WearableListenerService {
         if( messageEvent.getPath().equalsIgnoreCase( "/zip" ) ) {
             String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
             Intent intent = new Intent(this, InfoActivity.class );
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             //you need to add this flag since you're starting a new activity from a service
             intent.putExtra("zip", value);
             Log.d("T", "about to start watch InfoActivity with zip: "+value);

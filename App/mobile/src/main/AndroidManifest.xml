@@ -58,8 +58,18 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="d3a494c90a6e2b92b9af0bd1ac19ea536e2b0f2d" />
+            android:value="d3a494c90a6e2b92b9af0bd1ac19ea536e2b0f2d"
+            />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCiQ0pcOW_wQ_lIR-EzoEYatyrRZOYl4aU"/>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
